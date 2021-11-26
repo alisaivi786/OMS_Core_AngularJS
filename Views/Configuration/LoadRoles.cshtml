@@ -1,0 +1,49 @@
+﻿
+@model IEnumerable<Roles>
+
+<div class="card">
+    <div class="card-header">
+        <h4>Roles</h4>
+    </div>
+    <div class="card-body">
+        <div class="form-group">
+            <button id="btnAdd" type="button" class="btn btn-primary" >+ Add New</button>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped" id="tbl_grid">
+                <thead>
+                    <tr>
+                        <th class="text-center">
+                            #
+                        </th>
+                        <th>Role Name</th>
+                        <th>Desription</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model.Select((x,i)=>new {Data = x, Index = i + 1 }))
+                    {
+                    <tr>
+                        <td>@item.Index</td>
+                        <td>@item.Data.RoleName</td>
+                        <td>@item.Data.Description</td>
+                        <td>
+                            <button id="btnEdit" type="button" class="btn btn-primary btn-sm " onclick="edit(@item.Data.RoleId)"> Edit </button>
+                            <button type="button" class="btn btn-danger btn-sm" onclick="del(@item.Data.RoleId)"> Delete</button>
+                        </td>
+                    </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="~/assets/datatable-pagination.js"></script>
+
+

@@ -1,0 +1,139 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<section class="section" ng-controller="role-controller">
+    <div class="section-body">
+        <div class="row">
+            <div class="col-12">
+
+                <div id="PartialView" class="" style="overflow:hidden" ng-show="divList">
+                    <div class="card">
+                        <button id="btnAdd" type="button" class="btn btn-primary mt-2 ml-4"
+                                style="width:113px;"
+                                ng-click="addNew()">
+                            + Add New
+                        </button>
+                        <div class="form-group">
+
+                        </div>
+                        <div class="card-header">
+                            <h4>Roless</h4>
+                            <div class="card-header-form">
+                                <form>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" ng-model="searchTerm" ng-change="getDataList(1)" placeholder="Search">
+
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="card-body ">
+
+                            <div class="table-responsive">
+                                <table class="table table-striped" id="tbl_grid">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                #
+                                            </th>
+                                            <th>Role Name</th>
+                                            <th>Desription</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+
+                                        <tr ng-repeat="item in Items track by $index">
+                                            <td>{{PageSize * (CurrentPage-1)+$index+1}}</td>
+                                            <td>{{item.RoleName}}</td>
+                                            <td>{{item.Description}}</td>
+                                            <td>
+                                                <button id="btnEdit" type="button" class="btn btn-primary btn-sm " ng-click="edit(item)"> Edit </button>
+                                                <button type="button" class="btn btn-danger btn-sm" ng-click="setDeleteId(item)"> Delete</button>
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <div class="card-footer text-left">
+                                    <nav class="d-inline-block">
+                                        <ul class="pagination mb-0">
+                                            <li class="page-item " ng-show="isShowBackwardOne">
+                                                <a class="page-link" href="#" ng-click="getDataList(BackwardOne)" tabindex="-1"><i class="fas fa-chevron-left"></i></a>
+                                            </li>
+                                            <li class="page-item {{data==CurrentPage? 'active':''}}" ng-repeat="data in PageNumberArray">
+                                                <a class="page-link" href="#" ng-click="getDataList(data)">
+                                                    {{data}} <span class="sr-only">(current)</span>
+                                                </a>
+                                            </li>
+
+                                            <li class="page-item" ng-show="isShowForwardOne">
+                                                <a class="page-link" href="#" ng-click="getDataList(ForwardOne)"><i class="fas fa-chevron-right"></i></a>
+                                            </li>
+                                        </ul>
+
+                                    </nav>
+
+                                </div>
+
+                            </div>
+                            <div class="col-sm-3 ml-lg-5">
+                                <select ng-change="getDataList(1)"
+                                        ng-options="option.name for option in sPageSize.availableOptions track by option.id"
+                                        ng-model="sPageSize.selectedOption" class="w-20 input box mt-3 sm:mt-0 form-control"></select>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="card" ng-show="CrudForm">
+                    <div class="card-header">
+                        <h4>Roles</h4>
+                    </div>
+                    <form name="frm" novalidate id="form-validation">
+                        <div class="card-body">
+                            <input type="hidden" ng-model="RoleId" name="RoleId" class="form-control">
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input type="text" ng-model="RoleName" name="RoleName" class="form-control {{error}}" required>
+                                <div class="invalid-feedback">
+                                    <span ng-show="hasError('RoleName','required')">This field is required.</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Description</label>
+                                <input type="text" class="form-control" ng-model="Description" name="Description">
+                            </div>
+
+                        </div>
+                        <div class="card-footer text-left">
+                            <button class="btn btn-primary mr-1" id="btnSave" type="submit" ng-click="addUpdateRole(frm)">Save</button>
+                            <button class="btn btn-dark" id="btnCancel" type="button" ng-click="cancel()">Cancel</button>
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@section Scripts{
+
+    <script src="~/angular/controller/role-controller.js"></script>
+  
+}
+

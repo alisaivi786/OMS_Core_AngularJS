@@ -1,0 +1,54 @@
+﻿
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor
+
+@model OMS.Models.DAL.ModuleRepository
+
+
+<div class="main-sidebar sidebar-style-2">
+    <aside id="sidebar-wrapper">
+        <div class="sidebar-brand">
+            <a href="index.html">
+                <img alt="image" src="~/assets/@Constants.LOGIN_PAGE_LOGO" class="header-logo" style="width:100px; height:75px;"/>
+
+            </a>
+        </div>
+        <ul class="sidebar-menu">
+            <li class="menu-header">Main</li>
+            <li class="dropdown @(HttpContextAccessor.HttpContext.Request.RouteValues.Values.Contains("Dashboard") == true ?"active":"")">
+                <a href="/" class="nav-link"><i data-feather="monitor"></i><span>Dashboard</span></a>
+            </li>
+
+            @foreach (var module in Model.GelAllModules().OrderBy(x => x.nOrder))
+            {
+                
+                <li class="dropdown @(HttpContextAccessor.HttpContext.Request.RouteValues.Values.Contains(module.ModuleTitle) == true ?"active":"")">
+                    <a href="#" class="menu-toggle nav-link has-dropdown">
+                        <i class="material-icons">@module.Logo</i><span>@module.ModuleTitle</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        @foreach (var subModule in Model.GelAllSubModules().Where(x => x.ModuleId == module.ModuleId).ToList())
+                        {
+                            <li class="dropdown">
+                                <a href="#" class="has-dropdown">@subModule.SubModuleTitle</a>
+                                <ul class="dropdown-menu" style="display:@(HttpContextAccessor.HttpContext.Request.RouteValues.Values.Contains(module.ModuleTitle) == true ?"block":"none")">
+                                    @foreach (var pages in Model.GelAllPages().Where(x => x.SubModuleId == subModule.SubModuleId).ToList())
+                                    {
+                                        <li class="@(HttpContextAccessor.HttpContext.Request.RouteValues.Values.Contains(pages.strActionName) == true ?"active":"")"><a href="@Url.Action(pages.strActionName,pages.strControllerName)">@pages.PageName</a></li>
+                                    }
+
+                                </ul>
+                            </li>
+                        }
+
+                        @foreach (var pages in Model.GelAllPages().Where(x => x.ModuleId == module.ModuleId && x.SubModuleId == 0).ToList())
+                        {
+                            <li class="@(HttpContextAccessor.HttpContext.Request.RouteValues.Values.Contains(pages.strActionName) == true ?"active":"")" ><a href="@Url.Action(pages.strActionName,pages.strControllerName)">@pages.PageName</a></li>
+                        }
+
+                    </ul>
+                </li>
+            }
+        </ul>
+    </aside>
+</div>
